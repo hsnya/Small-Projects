@@ -1,2 +1,2 @@
 # Small-Projects
-My small projects for showcase
+I'll showcase my small projects here
