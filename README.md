@@ -1,2 +1,2 @@
-# Small-Projects
-I'll showcase my small projects here
+# Description
+Here, I will show anything I made while learning anything related to programming.
