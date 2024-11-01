@@ -10,14 +10,12 @@ start_width, end_width = map(int, input('Enter the starting and ending sticks wi
 start_arc, end_arc = map(int, input('Enter the starting and ending angles between sticks:').split())
 start_splits, end_splits = map(int, input('Enter the starting and ending sticks splits:').split())
 
-
 print('-- Type a single number for the next prompts --')
 
 tree_depth = int(input('Enter the depth of the tree (how many times the stick will split:)'))
 leaf_size = int(input('Enter the leaf size:'))
 speed = int(input('Enter how fast do you want the turtle (I recommended 0):'))
 
-print('Enjoy the show (;')
 # Direct variables
 # start_length = 120
 # end_length = 10
@@ -111,6 +109,7 @@ def tree_log(current_depth = tree_depth, current_length = start_length, current_
     tor.left(current_arc * ((floored_splits - 1) / 2))
 
 # Start the show!
+print('Enjoy the show (;')
 tree_log()
 
 canvas.exitonclick()

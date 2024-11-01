@@ -4,11 +4,6 @@ import os.path
 
 import image
 
-img_path = r'python_projects\collection1\image_effects\inputs\flower.jpg'
-
-img = image.Image(img_path)
-win = image.ImageWin(img.getWidth(), img.getHeight())
-img.draw(win)
 
 def red_wash():
     for row in range(img.getHeight()):
@@ -102,7 +97,28 @@ def sepia():
         if animation:
             img.draw(win)
 
-animation = True if input('Do you want animations? Yes to enable, anything to disable: ') else False
+script_abs_path = os.path.abspath(__file__)
+while 1:
+    img_name = input('Enter image name including the extension (from the inputs file): ')
+    img_path = os.path.abspath(__file__) + '/../inputs/' + img_name
+    if not os.path.isfile(img_path):
+        print("There is no image of that name, write another one.")
+
+img = image.Image(img_path)
+win = image.ImageWin(img.getWidth(), img.getHeight())
+img.draw(win)
+
+animation = True if input('Do you want animations? Yes to enable, anything to disable: ') == 'Yes' else False
+print('''Here are the functions names:
+      red_wash
+      green_wash
+      blue_wash
+      grey_scale
+      invert
+      mirror
+      blur
+      sepia
+      ''')
 while 1:
     choice = input('Type the function you want to run on the image: ')
     match choice:
@@ -135,14 +151,13 @@ while 1:
 img.draw(win)
 
 img_name = os.path.splitext(os.path.basename(img_path))
-output_path = 'python_projects\\collection1\\image_effects\\outputs\\' + img_name[0] + '_{}' + img_name[1]
+output_path = os.path.abspath(__file__) + '/../outputs/' + img_name[0] + '_{}' + img_name[1]
 
 order = 0
 while (os.path.exists(output_path.format(order))):
-    print(output_path.format(order))
-    input()
     order += 1
 else:
     img.save(output_path.format(order))
 
+print('Click on the image to close.')
 win.exit_on_click()
