@@ -1,3 +1,5 @@
+"""This program apply effects on images"""
+
 import os.path
 
 import image

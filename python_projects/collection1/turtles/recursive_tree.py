@@ -1,3 +1,5 @@
+"""This program draw a tree by recursive functions"""
+
 import turtle
 
 # Inputs

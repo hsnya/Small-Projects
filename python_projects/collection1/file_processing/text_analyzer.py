@@ -1,3 +1,5 @@
+"""This program reads txt files and create them"""
+
 import csv
 
 with open(r'Python projects\Samples\Texts\Input.txt', 'r') as fr:
