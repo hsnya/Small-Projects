@@ -1,0 +1,1 @@
+"""This program does animations based on cursor clicks and location on window."""

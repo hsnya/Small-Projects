@@ -1,4 +1,4 @@
-"""This program apply effects on images"""
+"""This program apply effects on images."""
 
 import os.path
 
@@ -14,7 +14,9 @@ def red_wash():
 
             img.setPixel(col, row, new_pixel)
         if animation:
-            img.draw(win)    
+            img.draw(win) 
+
+           
 def green_wash():
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
@@ -25,6 +27,8 @@ def green_wash():
             img.setPixel(col, row, new_pixel)
         if animation:
             img.draw(win)
+
+
 def blue_wash():
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
@@ -35,6 +39,8 @@ def blue_wash():
             img.setPixel(col, row, new_pixel)
         if animation:
             img.draw(win)
+
+
 def grey_scale():
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
@@ -45,6 +51,8 @@ def grey_scale():
             img.setPixel(col, row, new_pixel)
         if animation:
             img.draw(win)
+
+
 def invert():
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
@@ -55,6 +63,8 @@ def invert():
             img.setPixel(col, row, new_pixel)
         if animation:
             img.draw(win)
+
+
 def mirror():
     for row in range(img.getHeight()):
         for col in range(img.getWidth()//2):
@@ -65,6 +75,8 @@ def mirror():
             img.setPixel(img.getWidth() - col - 1, row, pixel1)
         if animation:
             img.draw(win)
+
+
 def blur():
     for row in range(1, img.getHeight() - 1):
         for col in range(1, img.getWidth() - 1):
@@ -82,6 +94,8 @@ def blur():
             img.setPixel(col, row, new_pixel)
         if animation:
             img.draw(win)
+
+
 def sepia():
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
@@ -97,12 +111,16 @@ def sepia():
         if animation:
             img.draw(win)
 
+
 script_abs_path = os.path.abspath(__file__)
+
 while 1:
     img_name = input('Enter image name including the extension (from the inputs file): ')
     img_path = os.path.abspath(__file__) + '/../inputs/' + img_name
-    if not os.path.isfile(img_path):
-        print("There is no image of that name, write another one.")
+    if os.path.isfile(img_path):
+        break
+    print("There is no image of that name, write another one.")
+        
 
 img = image.Image(img_path)
 win = image.ImageWin(img.getWidth(), img.getHeight())
@@ -110,44 +128,47 @@ img.draw(win)
 
 animation = True if input('Do you want animations? Yes to enable, anything to disable: ') == 'Yes' else False
 print('''Here are the functions names:
-      red_wash
-      green_wash
-      blue_wash
-      grey_scale
-      invert
-      mirror
-      blur
-      sepia
-      ''')
+- red_wash
+- green_wash
+- blue_wash
+- grey_scale
+- invert
+- mirror
+- blur
+- sepia
+''')
+
 while 1:
     choice = input('Type the function you want to run on the image: ')
     match choice:
         case 'red_wash':
-            red_wash() # Set the green and blue values to 0 while keeping red value
+            red_wash() # Set the green and blue values to 0 while keeping red value.
             break
         case 'green_wash':
-            green_wash() # Set the red and blue values to 0 while keeping green value
+            green_wash() # Set the red and blue values to 0 while keeping green value.
             break
         case 'blue_wash':
-            blue_wash() # Set the red and green values to 0 while keeping blue value
+            blue_wash() # Set the red and green values to 0 while keeping blue value.
             break
         case 'grey_scale':
-            grey_scale() # Average all color values
+            grey_scale() # Average all color values.
             break
         case 'invert':
-            invert() # Subtract the color value from 255 for every color
+            invert() # Subtract the color value from 255 for every color.
             break
         case 'mirror':
-            mirror() # Switch places of corresponding pixels
+            mirror() # Switch places of corresponding pixels.
             break
         case 'blur':
-            blur() # Average every pixel with its neighbors
+            blur() # Average every pixel with its neighbors.
             break
         case 'sepia':
-            sepia() # Formula to get specific colors value
+            sepia() # Formula to get specific colors value.
             break
         case _:
             print('Invalid input, try again.')
+
+
 img.draw(win)
 
 img_name = os.path.splitext(os.path.basename(img_path))

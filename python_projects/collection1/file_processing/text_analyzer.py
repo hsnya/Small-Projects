@@ -1,3 +1,3 @@
-"""This program reads txt files and create them"""
+"""This program reads txt files and create them."""
 
 import os.path

@@ -1,1 +1,1 @@
-"""This program generate images with patterns"""
+"""This program generate images with patterns."""
