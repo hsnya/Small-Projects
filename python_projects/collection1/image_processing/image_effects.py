@@ -6,6 +6,9 @@ import image
 
 
 def red_wash():
+    """Set the green and blue values to 0 while keeping red value."""
+    
+    
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
             pixel = img.getPixel(col, row)
@@ -18,6 +21,9 @@ def red_wash():
 
            
 def green_wash():
+    """Set the red and blue values to 0 while keeping green value."""
+    
+    
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
             pixel = img.getPixel(col, row)
@@ -30,6 +36,9 @@ def green_wash():
 
 
 def blue_wash():
+    """Set the red and green values to 0 while keeping blue value."""
+    
+    
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
             pixel = img.getPixel(col, row)
@@ -42,6 +51,9 @@ def blue_wash():
 
 
 def grey_scale():
+    """Average all color values."""
+    
+    
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
             pixel = img.getPixel(col, row)
@@ -54,6 +66,9 @@ def grey_scale():
 
 
 def invert():
+    """Subtract the color value from 255 for every color."""
+    
+    
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
             pixel = img.getPixel(col, row)
@@ -66,6 +81,9 @@ def invert():
 
 
 def mirror():
+    """Switch places of corresponding pixels."""
+    
+    
     for row in range(img.getHeight()):
         for col in range(img.getWidth()//2):
             pixel1 = img.getPixel(col, row)
@@ -78,6 +96,9 @@ def mirror():
 
 
 def blur():
+    """Average every pixel with its neighbors."""
+    
+    
     for row in range(1, img.getHeight() - 1):
         for col in range(1, img.getWidth() - 1):
             red = green = blue = 0
@@ -97,6 +118,9 @@ def blur():
 
 
 def sepia():
+    """Formula to get specific colors value."""
+    
+    
     for row in range(img.getHeight()):
         for col in range(img.getWidth()):
             pixel = img.getPixel(col, row)
@@ -112,9 +136,7 @@ def sepia():
             img.draw(win)
 
 
-script_abs_path = os.path.abspath(__file__)
-
-while 1:
+while True:
     img_name = input('Enter image name including the extension (from the inputs file): ')
     img_path = os.path.abspath(__file__) + '/../inputs/' + img_name
     if os.path.isfile(img_path):
@@ -126,7 +148,7 @@ img = image.Image(img_path)
 win = image.ImageWin(img.getWidth(), img.getHeight())
 img.draw(win)
 
-animation = True if input('Do you want animations? Yes to enable, anything to disable: ') == 'Yes' else False
+animation = input('Do you want animations? Yes to enable, anything to disable: ') == 'Yes'
 print('''Here are the functions names:
 - red_wash
 - green_wash
@@ -138,32 +160,32 @@ print('''Here are the functions names:
 - sepia
 ''')
 
-while 1:
+while True:
     choice = input('Type the function you want to run on the image: ')
     match choice:
         case 'red_wash':
-            red_wash() # Set the green and blue values to 0 while keeping red value.
+            red_wash()
             break
         case 'green_wash':
-            green_wash() # Set the red and blue values to 0 while keeping green value.
+            green_wash()
             break
         case 'blue_wash':
-            blue_wash() # Set the red and green values to 0 while keeping blue value.
+            blue_wash()
             break
         case 'grey_scale':
-            grey_scale() # Average all color values.
+            grey_scale()
             break
         case 'invert':
-            invert() # Subtract the color value from 255 for every color.
+            invert()
             break
         case 'mirror':
-            mirror() # Switch places of corresponding pixels.
+            mirror()
             break
         case 'blur':
-            blur() # Average every pixel with its neighbors.
+            blur()
             break
         case 'sepia':
-            sepia() # Formula to get specific colors value.
+            sepia()
             break
         case _:
             print('Invalid input, try again.')
