@@ -138,7 +138,7 @@ def sepia():
 
 while True:
     img_name = input('Enter image name including the extension (from the inputs file): ')
-    img_path = os.path.abspath(__file__) + '/../inputs/' + img_name
+    img_path = f'{os.path.abspath(__file__)}/../inputs/{img_name}'
     if os.path.isfile(img_path):
         break
     print("There is no image of that name, write another one.")
@@ -194,7 +194,7 @@ while True:
 img.draw(win)
 
 img_name = os.path.splitext(os.path.basename(img_path))
-output_path = os.path.abspath(__file__) + '/../outputs/' + img_name[0] + '_{}' + img_name[1]
+output_path = f'{os.path.abspath(__file__)}/../outputs/{img_name[0]}_{'{}'}{img_name[1]}'
 
 order = 0
 while (os.path.exists(output_path.format(order))):
