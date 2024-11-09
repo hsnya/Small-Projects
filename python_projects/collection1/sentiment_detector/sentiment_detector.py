@@ -1,23 +1,47 @@
-"""This program reads files and detect how positive or negative they are."""
+"""Rate tweets based on how positive or negative they are.
 
+Reads csv files of tweets and detect how positive or negative they are, and write the analyses in an external file.
+
+Example:
+    $ tweets_detector_txt((f'{os.path.abspath(__file__)}/../inputs/project_twitter_data.csv','project_twitter_data','.csv'))
+    $ tweets_detector_csv((f'{os.path.abspath(__file__)}/../inputs/project_twitter_data.csv','project_twitter_data','.csv'))
+    $ tweets_detector_dicts((f'{os.path.abspath(__file__)}/../inputs/project_twitter_data.csv','project_twitter_data','.csv'))
+    $ tweets_detector_txt()
+
+Section.
+
+Attributes:
+    positive_words (list[str]): Positive words extracted from assets.
+    negative_words (list[str]): Negative words extracted from assets.
+
+Todo:
+    * Lookup for improvements and apply them.
+"""
 import csv
 import os.path
 
 positive_words = []
-with open(os.path.abspath(__file__) + '/../assets/txt/positive_words.txt') as positives_file:
+with open(os.path.abspath(__file__) + '/../assets/positive_words.txt') as positives_file:
     for lin in positives_file:
         if lin[0] != ';' and lin[0] != '\n':
             positive_words.append(lin.strip())
 
 negative_words = []
-with open(os.path.abspath(__file__) + '/../assets/txt/negative_words.txt') as negatives_file:
+with open(os.path.abspath(__file__) + '/../assets/negative_words.txt') as negatives_file:
     for lin in negatives_file:
         if lin[0] != ';' and lin[0] != '\n':
             negative_words.append(lin.strip())
 
 
 def strip_punctuation(s: str) -> str:
-    """A function to remove punctuation marks."""
+    """Remove punctuation marks from a string.
+
+    Args:
+        s (str): A string to be stripped.
+
+    Returns:
+        str: A stripped string.
+    """
     
     punctuation_chars = ["'", '"', ",", ".", "!", ":", ";", '#', '@']
     
@@ -28,7 +52,14 @@ def strip_punctuation(s: str) -> str:
 
 
 def get_positives(s: str) -> int:
-    """A function that counts the number of positive words in the string."""
+    """Counts the number of positive words in a string.
+
+    Args:
+        s (str): A string to count from it.
+
+    Returns:
+        int: The count of positive words.
+    """
     
     s = strip_punctuation(s.lower()).split()
     
@@ -41,7 +72,14 @@ def get_positives(s: str) -> int:
         
 
 def get_negatives(s: str) -> int:
-    """A function that counts the number of negative words in the string."""
+    """Counts the number of negatives words in a string.
+
+    Args:
+        s (str): A string to count from it.
+
+    Returns:
+        int: The count of negatives words.
+    """
     
     s = strip_punctuation(s.lower()).split()
 
@@ -54,7 +92,14 @@ def get_negatives(s: str) -> int:
  
         
 def input_file(prompt: str = '') -> tuple[str]:
-    """A function that prompt the user for a file path."""
+    """Prompt the user for a file name from inputs folder.
+
+    Args:
+        prompt (str, optional): A text is going to print in the terminal that asks the user for input. Defaults to ''.
+
+    Returns:
+        tuple[str]: Return a tuple = (File path, File name, File extension)
+    """
     
     while True:
         file_name = os.path.splitext(input(prompt))
@@ -62,11 +107,19 @@ def input_file(prompt: str = '') -> tuple[str]:
         if os.path.isfile(file_path):
             break
         print("There is no file of that name, write another one.")
-    return (file_path) + file_name
+    return (file_path,) + file_name
 
 
-def file_order(file_data):
-    output_path = f'{os.path.abspath(__file__)}/../outputs/{file_data[2].replace('.','')}/{file_data[1]}_{'{}'}{file_data[2]}'
+def file_order(file_data: tuple[str]) -> str:
+    """Enumerate the file names.
+
+    Args:
+        file_data (_type_): A tuple of three values, File path, File name, and File extension.
+
+    Returns:
+        str: The numeric path for later safe.
+    """
+    output_path = f'{os.path.abspath(__file__)}/../outputs/{file_data[1]}_{'{}'}{file_data[2]}'
     
     order = 0
     while (os.path.exists(output_path.format(order))):
@@ -76,9 +129,13 @@ def file_order(file_data):
     
     
 def tweets_detector_txt(file_data: tuple[str] = None):
-    """A function that takes a csv of tweets and analyze it with csv module and write its sentiment score in another file."""
+    """Analyze a csv of tweets without any modules and write its sentiment score in another file.
+
+    Args:
+        file_data (tuple[str], optional): A tuple of three values, File path, File name, and File extension, not specifying it will prompt the user. Defaults to None.
+    """
     if file_data == None:
-        file_data = input_file('Enter txt/csv file name including the extension (from the inputs file): ')
+        file_data = input_file('Enter txt/csv file name including the extension (from the inputs folder): ')
     
     output_path = file_order(file_data)
     
@@ -99,7 +156,11 @@ def tweets_detector_txt(file_data: tuple[str] = None):
             
 
 def tweets_detector_csv(file_data: tuple[str] = None):
-    """A function that takes a csv of tweets and analyze it with dictionaries and write its sentiment score in another file."""
+    """Analyze a csv of tweets with csv module and write its sentiment score in another file.
+
+    Args:
+        file_data (tuple[str], optional): A tuple of three values, File path, File name, and File extension, not specifying it will prompt the user. Defaults to None.
+    """
     if file_data == None:
         file_data = input_file('Enter txt/csv file name including the extension (from the inputs file): ')
     
@@ -121,7 +182,11 @@ def tweets_detector_csv(file_data: tuple[str] = None):
 
 
 def tweets_detector_dicts(file_data: tuple[str] = None):
-    """A function that takes a csv of tweets and analyze it and write its sentiment score in another file."""
+    """Analyze a csv of tweets with csv module as dictionaries and write its sentiment score in another file.
+
+    Args:
+        file_data (tuple[str], optional): A tuple of three values, File path, File name, and File extension, not specifying it will prompt the user. Defaults to None.
+    """
     if file_data == None:
         file_data = input_file('Enter txt/csv file name including the extension (from the inputs file): ')
     
@@ -141,7 +206,8 @@ def tweets_detector_dicts(file_data: tuple[str] = None):
                 writer.writerow({x:y for x,y in zip(writer.fieldnames,map(str, (line['retweet_count'], line['reply_count'], positive_score, negative_score, net_score)))}) 
 
 
-tweets_detector_txt((f'{os.path.abspath(__file__)}/../inputs/csv/project_twitter_data.csv','project_twitter_data','.csv'))
-# tweets_detector_csv((f'{os.path.abspath(__file__)}/../inputs/csv/project_twitter_data.csv','project_twitter_data','.csv'))
-# tweets_detector_dicts((f'{os.path.abspath(__file__)}/../inputs/csv/project_twitter_data.csv','project_twitter_data','.csv'))
-# tweets_detector_txt()
+if __name__ == '__main__':
+    tweets_detector_txt((f'{os.path.abspath(__file__)}/../inputs/project_twitter_data.csv','project_twitter_data','.csv'))
+    # tweets_detector_csv((f'{os.path.abspath(__file__)}/../inputs/project_twitter_data.csv','project_twitter_data','.csv'))
+    # tweets_detector_dicts((f'{os.path.abspath(__file__)}/../inputs/project_twitter_data.csv','project_twitter_data','.csv'))
+    # tweets_detector_txt()
