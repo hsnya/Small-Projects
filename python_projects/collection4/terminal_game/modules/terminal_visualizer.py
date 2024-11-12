@@ -10,5 +10,4 @@ Todo:
     * Lookup for improvements and apply them.
 """
 
-import ansi_helper
 import ascii_helper
