@@ -1,0 +1,23 @@
+Topics I didn't experience with them much will go here.
+- Collection 1
+    - Lambda functions
+    - Json
+    - Deep and shallow copying
+    - Filtering
+    - Sorting
+        - Breaking ties
+    - Classes and objects
+        - Constructors
+        - String representation
+        - Methods
+        - Dunderscore methods
+        - Sorting objects
+        - Inheritance and multiple inheritance
+            - Overriding
+            - Modifications
+    - Decorators
+    - Decorators with arguments
+    - Built-in decorators
+    - *Args and **Kwargs
+
+- Collection 2

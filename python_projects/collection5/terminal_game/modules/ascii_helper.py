@@ -7,6 +7,8 @@ Example:
     
     $ print(move_cursor('up', 9))
 
+    $ print(sgr(bold=True, italic=True, underline=True))
+
 Attributes:
     flow_mode (int): How the functions values should be treated,
 - 0: Return their value.
@@ -17,10 +19,6 @@ Attributes:
 Todo:
     * Lookup for improvements and apply them.
     
-    * Complete control sequence introducer.
-        * Find a way to get cursor's position.
-        * Complete text control.
-        * Complete text attributes.
     * Complete operating system command.
         * .
         * .
@@ -30,7 +28,9 @@ Todo:
 """
 
 import functools
+import select
 import sys
+import time
 
 flow_mode: int = 0
 """How the functions values should be treated,
@@ -45,6 +45,7 @@ accum: str = ''
 def ring():
     """Ring the terminal's bell."""
     sys.stdin.write('\a')
+    sys.stdin.flush()
 
 
 def flow(func):
@@ -60,7 +61,7 @@ def flow(func):
         _wrapped: The wrapped function.
     """
     @functools.wraps(func)
-    def wrapper(*args: any, **kwargs: any):
+    def wrapper(*args: any, **kwargs: any) -> str:
         """Control the return value of the function.
 
         Raises:
@@ -75,7 +76,8 @@ def flow(func):
             case 0:
                 return result
             case 1:
-                sys.stdin.write(result)
+                sys.stdout.write(result)
+                sys.stdout.flush()
             case 2:
                 accumulate(result)
             case _:
@@ -99,11 +101,12 @@ def leash():
     
     global accum
     sys.stdin.write(accum)
+    sys.stdin.flush()
     accum = ''
 
 
 @flow
-def move_cursor(direction: str, n: int = 1):
+def move_cursor(direction: str, n: int = 1) -> str:
     """Moves terminal's cursor `n` cells in the given `direction`. If the cursor is already at the edge of the screen, this has no effect.
     Directions (judged based on the first letter):
     - up
@@ -156,7 +159,7 @@ def move_cursor(direction: str, n: int = 1):
 
 
 @flow
-def set_cursor(n: int = 1, m: int = 1):
+def set_cursor(n: int = 1, m: int = 1) -> str:
     """Moves the cursor to row `n`, column `m`. The values are 1-based.
 
     Args:
@@ -181,16 +184,56 @@ def set_cursor(n: int = 1, m: int = 1):
     return f'\033[{n};{m}H'
 
 
-def get_cursor():
-    sys.stdout.write('\033[6n')
-    a = ascii(input())
-    a = a[6:-2]
-    x,y = map(int, a.split(';'))
-    return (x,y)
+def get_cursor() -> tuple[int]:
+    """Get the cursor's position in the terminal.
+
+    Returns:
+        tuple[int]: x, y. the cursor's position.
+    """
+    sys.stdout.write("\033[6n")
+    sys.stdout.flush()
+    
+    response = ""
+    start_time = time.time()
+    timeout = 1.0
+
+    if sys.platform.startswith('win'):
+        # Windows-specific implementation
+        import msvcrt
+        while time.time() - start_time < timeout:
+            if msvcrt.kbhit():
+                char = msvcrt.getch()
+                response += char.decode("utf-8")
+                if char == b'R':
+                    break
+    else:
+        # UNIX-based implementation
+        import termios
+        import tty
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setcbreak(fd)
+            while time.time() - start_time < timeout:
+                if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+                    char = sys.stdin.read(1)
+                    response += char
+                    if char == 'R':
+                        break
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+    if response.startswith("\033[") and response.endswith("R"):
+        try:
+            pos = response[2:-1]
+            row, col = map(int, pos.split(";"))
+            return row, col
+        except ValueError:
+            pass
 
 
 @flow
-def erase(space: str = 'Screen', n: int = 2):
+def erase(space: str = 'Screen', n: int = 2) -> str:
     """Erase text in terminal based on modes.
     Modes:
     - 0: Clear from cursor to end of the screen.
@@ -236,7 +279,7 @@ def erase(space: str = 'Screen', n: int = 2):
 
 
 @flow
-def scroll(direction: str, n: int = 1):
+def scroll(direction: str, n: int = 1) -> str:
     """Add new lines at the bottom or the top of the screen.
     Direction (judged based on the first letter):
     - up # Add lines to the bottom.
@@ -274,7 +317,92 @@ def scroll(direction: str, n: int = 1):
     return f'\033[{n}{l}'
 
 
+@flow
+def sgr(reset: bool = False, **kwargs) -> str:
+    """Changes how the text looks. Enter a key-value of each format for the name as key and the value for how do want it to look.
+    The_name_of_formation = False *to disable* / True *to enable* / int *for predefined colors from 0-255* / tuple[int] *for rbg colors*
+    - bold: bool
+    - faint: bool
+    - italic: bool
+    - strike: bool
+    - underline: bool
+    - double_underline: bool
+    - overline: bool
+    - blink: bool
+    - invert: bool
+    - foreground: bool | int | tuple[int]
+    - background: bool | int | tuple[int]
+
+    Args:
+        reset (bool, optional): If true, it will reset the formation before formatting. Defaults to False.
+        **kwargs (dict, optional): Formats.
+
+    Raises:
+        ValueError: If passed a non-boolean type to the parameter `reset`.
+        ValueError: If passed an invalid format key to the parameter `**kwargs`.
+        ValueError: If passed a non-boolean format value to the parameter `**kwargs`.
+        ValueError: If passed an invalid color format.
+
+    Returns:
+        str: Command to print, or combine with other commands.
+    """
+    
+    if type(reset) != bool:
+        raise ValueError('`reset` is not a boolean')
+    
+    f = '\033[{}m'
+    formats = {'bold': {True: 1, False: 22}, 'faint': {True: 2, False: 22}, 'italic': {True: 3, False: 23},
+               'underline': {True: 4, False: 24}, 'double_underline': {True: 21, False: 24}, 'overline': {True: 53, False: 55},
+               'blink': {True: '5', False: '25'}, 'invert': {True: '7', False: '27'}, 'strike': {True: '9', False: '29'},
+               'foreground': {int: '38;5;{}', tuple: '38;2;{};{};{}', False: 39}, 'background': {int: '48;5;{}', tuple: '48;2;{};{};{}', False: 49}}
+    
+    foreground = 'foreground',kwargs.pop('foreground', None)
+    background = 'background',kwargs.pop('background', None)
+    
+    
+    formation = '\033[m' if reset else ''
+    
+    for key in kwargs:
+        if key not in formats:
+            raise ValueError(f'{key} is an invalid format')
+        
+        value = kwargs[key]
+        
+        if type(value) != bool:
+            raise ValueError(f'{key}\'s value is not boolean')
+        
+        formation += f.format(formats[key][value])
+
+    for color in foreground, background:
+        
+        value = color[1]
+        name = color[0]
+        if value != None:
+            if value == False:
+                formation += f.format(formats[name][False])
+            elif type(value) == int:
+                formation += f.format(formats[name][int].format(value))
+            elif type(value) == tuple and all(type(x) == int for x in value) and len(value) == 3:
+                formation += f.format(formats[name][tuple].format(*value))
+            else:
+                raise ValueError(f'{value} for {name} is not valid.')
+    
+
+    return formation
+
+
 if __name__ == '__main__':
     flow_mode = 1
+    formats = {'bold': {True: '1', False: '22'}, 'faint': {True: '2', False: '22'}, 'italic': {True: '3', False: '23'},
+               'underline': {True: '4', False: '24'}, 'double_underline': {True: '21', False: '24'}, 'overline': {True: '53', False: '55'},
+               'blink': {True: '5', False: '25'}, 'invert': {True: '7', False: '27'}, 'strike': {True: '9', False: '29'}}
+    for i in range(256):
+        sgr(background=(i, 0, 0))
+        print('#'*30, end='-')
+        sgr(background=(0, i, 0))
+        print('#'*30, end='-')
+        sgr(background=(0, 0, i))
+        print('#'*30, end='-')
+        sgr(reset=True)
+        print()
     
-    print(get_cursor())
