@@ -18,13 +18,6 @@ Attributes:
 
 Todo:
     * Lookup for improvements and apply them.
-    
-    * Complete operating system command.
-        * .
-        * .
-    * Complete Fs escape sequence.
-    * Complete Fp escape sequence.
-    * Complete nF escape sequence.
 """
 
 import functools
@@ -44,8 +37,8 @@ accum: str = ''
 
 def ring():
     """Ring the terminal's bell."""
-    sys.stdin.write('\a')
-    sys.stdin.flush()
+    sys.stdout.write('\a')
+    sys.stdout.flush()
 
 
 def flow(func):
@@ -100,8 +93,8 @@ def leash():
     """Print the accumulated strings / commands and clear the accumulator."""
     
     global accum
-    sys.stdin.write(accum)
-    sys.stdin.flush()
+    sys.stdout.write(accum)
+    sys.stdout.flush()
     accum = ''
 
 
@@ -382,7 +375,7 @@ def sgr(reset: bool = False, **kwargs) -> str:
                 formation += f.format(formats[name][False])
             elif type(value) == int:
                 formation += f.format(formats[name][int].format(value))
-            elif type(value) == tuple and all(type(x) == int for x in value) and len(value) == 3:
+            elif type(value) == tuple and all(type(x) == int and 0 <= x <= 255 for x in value) and len(value) == 3:
                 formation += f.format(formats[name][tuple].format(*value))
             else:
                 raise ValueError(f'{value} for {name} is not valid.')
@@ -392,17 +385,15 @@ def sgr(reset: bool = False, **kwargs) -> str:
 
 
 if __name__ == '__main__':
-    flow_mode = 1
-    formats = {'bold': {True: '1', False: '22'}, 'faint': {True: '2', False: '22'}, 'italic': {True: '3', False: '23'},
-               'underline': {True: '4', False: '24'}, 'double_underline': {True: '21', False: '24'}, 'overline': {True: '53', False: '55'},
-               'blink': {True: '5', False: '25'}, 'invert': {True: '7', False: '27'}, 'strike': {True: '9', False: '29'}}
-    for i in range(256):
-        sgr(background=(i, 0, 0))
-        print('#'*30, end='-')
-        sgr(background=(0, i, 0))
-        print('#'*30, end='-')
-        sgr(background=(0, 0, i))
-        print('#'*30, end='-')
-        sgr(reset=True)
-        print()
+    flow_mode = 2
+    set_cursor(0,0)
+    erase()
+    leash()
+    for i in range(20):
+        set_cursor(i,0)
+        for j in range(40):
+            sgr(foreground=i+j+16)
+            accumulate('■')
+            sgr(reset=True)
+    leash()
     

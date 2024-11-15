@@ -10,4 +10,4 @@ Todo:
     * Lookup for improvements and apply them.
 """
 
-import ascii_helper
+import curses
