@@ -1,11 +1,23 @@
 Topics I didn't experience with them much will go here.
 - Collection 1
+    - Dictionaries methods
+        - keys()
+        - values()
+        - items()
     - Lambda functions
     - Json
+        - loads()
+        - dumps()
+            - indent
+            - sort_keys
     - Deep and shallow copying
+        - copy module
+            - copy()
+            - deepcopy()
     - Filtering
     - Sorting
         - Breaking ties
+        - Sort dictionaries keys
     - Classes and objects
         - Constructors
         - String representation
@@ -16,8 +28,15 @@ Topics I didn't experience with them much will go here.
             - Overriding
             - Modifications
     - Decorators
-    - Decorators with arguments
-    - Built-in decorators
+        - Decorators with arguments
+        - Built-in decorators
+            - property
+            - staticmethod
+            - classmethod
+            - functools
+                - cache
+                - wraps
     - *Args and **Kwargs
 
 - Collection 2
+    - Dates and time
