@@ -15,8 +15,8 @@ Todo:
     * You have to also use ``sphinx.ext.todo`` extension
 """
 import os.path
-
-import regex
+import re
 
 if __name__ == '__main__':
+    
     pass

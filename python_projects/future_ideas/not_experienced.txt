@@ -39,4 +39,77 @@ Topics I didn't experience with them much will go here.
     - *Args and **Kwargs
 
 - Collection 2
-    - Dates and time
+    - Dates and times
+        - time
+            - time()
+        - datetime
+            - fromtimestamp()
+            - datetime attributes
+            - timedelta
+            - today()
+            - operations and comparisons
+    - numpy
+        - array()
+            - ndim
+            - shape
+            - dtype
+            - ones()
+            - zeros()
+            - rand()
+            - arange()
+            - linspace()
+            - operations
+                - element-wise operations
+                    - addition and subtraction
+                    - multiplication and division
+                    - exponentiation
+                    - boolean arrays
+                - matrix-level operations
+                    - matrix product
+                - aggregation functions
+                    - sum()
+                    - max()
+                    - min()
+                    - mean()
+            - reshape()
+            - full()
+            - indexing
+                - list indexing
+                - boolean indexing
+            - slicing
+                - preserving columns
+            - iterating
+            - genfromtxt()
+                - keys indexing
+    - regex
+        - search()
+        - split()
+        - findall()
+        - Anchors
+            - ^-
+            - -$
+        - Character Classes
+            - -
+            - []
+            - [-]
+            - |
+            - [^]
+        - Quantifiers
+            - {}
+            - {,}
+            - +
+            - *
+            - ?
+        - Meta characters
+            - \w
+            - \d
+            - \s
+        - Groups
+            - ()
+            - finditer()
+            - (?P<title>)
+                - groupdict() 
+            - (?=)
+        - Flags
+            - VERBOSE
+
