@@ -89,7 +89,6 @@ Topics I didn't experience with them much will go here.
             - ^-
             - -$
         - Character Classes
-            - -
             - []
             - [-]
             - |
@@ -112,4 +111,16 @@ Topics I didn't experience with them much will go here.
             - (?=)
         - Flags
             - VERBOSE
+    - pandas
+        - Series()
+            - nan
+            - index
+            - iloc[]
+            - loc[]
+            - head()
+            - iat[]
+            - at[]
+            - items()
+            - non-unique labels
+
 
