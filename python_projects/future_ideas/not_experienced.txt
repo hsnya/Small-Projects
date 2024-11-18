@@ -122,5 +122,34 @@ Topics I didn't experience with them much will go here.
             - at[]
             - items()
             - non-unique labels
-
-
+        - DataFrame()
+            - index
+            - head()
+            - iloc[]
+            - loc[]
+            - []
+            - T
+            - drop()
+                - inplace
+                - axis
+            del
+            [] = 
+            read_csv()
+                index_col
+                rename
+                    columns
+                    mapper
+                    axis
+            columns
+            [] >
+            where()
+            dropna()
+            gt
+            lt
+            &
+            |
+            set_index()
+            reset_index()
+            unique()
+            [[]]
+            [()]
