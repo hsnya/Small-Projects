@@ -129,13 +129,75 @@ def dataFramesIndexing():
          ('Michigan', 'Wayne County')] ])
 
 
-def dataFramesManipulation():
-    pass
-
-
 def missingValues():
-    pass
+    df = pd.read_csv(r'python_projects\collection2\pandas\inputs/class_grades.csv')
+    print(df.head(10))
+    
+    print(df.isnull().head(10))
 
+    df.fillna(0, inplace=True)
+    print(df.head(10))
+    
+    df = pd.read_csv(r"python_projects\collection2\pandas\inputs/log.csv")
+    
+    df.set_index('time', inplace=True)
+    df.sort_index(inplace=True)
+    
+    df.reset_index(inplace=True)
+    df.set_index(['time', 'user'], inplace=True)
+    
+    print(df.head(20))
+    
+    df.fillna(method='ffill', inplace=True)
+    print(df.head())
+    
+    df.replace([False, 10.0], [True, 100.0], inplace=True)
+    print(df.head())
+    
+    df.replace(to_replace='.*\.html$', value='webpage', regex=True, inplace=True)
+    print(df.head())
+    
+    df.replace(['.*l$','.*e$'], ['L','E'], regex=True, inplace=True)
+    print(df.head())
+    
+
+def dataFramesManipulation():
+    dfs=pd.read_html("https://en.wikipedia.org/wiki/College_admissions_in_the_United_States")
+    print(dfs[9].head())
+    
+    df = pd.read_csv(r'python_projects\collection2\pandas\inputs\census.csv')
+    print(df.head())
+    
+    def min_max(row):
+        data = row[['POPESTIMATE2010',
+                'POPESTIMATE2011',
+                'POPESTIMATE2012',
+                'POPESTIMATE2013',
+                'POPESTIMATE2014',
+                'POPESTIMATE2015']]
+        
+        return pd.Series({'MIN': np.min(data), 'MAX': np.max(data)})
+    
+    print(df.apply(min_max, axis=1))
+
+    df = pd.read_csv(r'python_projects\collection2\pandas\inputs\presidents.csv')
+    print(df.head())
+    
+    def splitname(dataFrame):
+        names = dataFrame['President'].split()
+        dataFrame['First'] = names[0]
+        dataFrame['Last'] = names[-1]
+        return dataFrame
+    print(df.apply(splitname, axis='columns').head())
+    
+    pattern = r'(?P<First>^\w*) (?P<Last>\w*$)'
+    print(df['President'].str.extract(pattern).head())
+    
+    pattern = r'(\w{3} \d{2}, \d{4})'
+    df['born'] = df['Born'].str.extract(pattern)
+    print(pd.to_datetime(df['born']).head())
+    
+    
 
 if __name__ == '__main__':
     # series()
@@ -144,5 +206,5 @@ if __name__ == '__main__':
     # dataFramesIndexLoad()
     # dataFramesQuerying()
     # dataFramesIndexing()
+    # missingValues()
     dataFramesManipulation()
-    missingValues()

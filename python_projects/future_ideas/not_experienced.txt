@@ -153,3 +153,18 @@ Topics I didn't experience with them much will go here.
             unique()
             [[]]
             [()]
+            isnull()
+            fillna()
+                method
+                    'ffill'
+                    'bfill'
+            inplace
+            sort_index()
+            replace()
+                replace([],[])
+                replace(regex=True)
+            read_html()
+            apply()
+            Series.str.extract()
+            to_datetime()
+            isin()
