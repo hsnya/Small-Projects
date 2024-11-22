@@ -132,39 +132,92 @@ Topics I didn't experience with them much will go here.
             - drop()
                 - inplace
                 - axis
-            del
-            [] = 
-            read_csv()
-                index_col
-                rename
-                    columns
-                    mapper
-                    axis
-            columns
-            [] >
-            where()
-            dropna()
-            gt
-            lt
-            &
-            |
-            set_index()
-            reset_index()
-            unique()
-            [[]]
-            [()]
-            isnull()
-            fillna()
-                method
-                    'ffill'
-                    'bfill'
-            inplace
-            sort_index()
-            replace()
-                replace([],[])
-                replace(regex=True)
-            read_html()
-            apply()
-            Series.str.extract()
-            to_datetime()
-            isin()
+            - del
+            - [] = 
+            - read_csv()
+                - index_col
+                - rename
+                    - columns
+                    - mapper
+                    - axis
+            - columns
+            - [] >
+            - where()
+            - dropna()
+            - gt
+            - lt
+            - &
+            - |
+            - set_index()
+            - reset_index()
+            - unique()
+            - [[]]
+            - [()]
+            - isnull()
+            - fillna()
+                - method
+                    - 'ffill'
+                    - 'bfill'
+            - inplace
+            - sort_index()
+            - replace()
+                - replace([],[])
+                - replace(regex=True)
+            - read_html()
+            - apply()
+            - Series.str.extract()
+            - to_datetime()
+            - isin()
+            - merge()
+                - left and right index
+                - how
+                    - outer
+                    - inner
+                    - right
+                    - left
+                - on
+            - concat()
+                - axis
+                - keys
+            - groupby()
+                - group
+                - frame
+                - function grouping
+                - level
+                - agg({})
+                - transform()
+                - filter()
+            - CategoricalDtype()
+                - categories
+                - ordered
+            - astype()
+            - cut()
+            - pivot_table()
+                - values
+                - index
+                - columns
+                - aggfunc
+                - margins
+                - stack()
+                - unstack()
+                - idxmax()
+            - Timestamp()
+                - isoweekday()
+                - weekday()
+                - year
+                - Period()
+                    +
+                - to_datetime()
+                    - dayfirst
+                    - format
+                        - mixed
+                - TimeDelta()
+                - offsets
+                    - Week()
+                    - MonthEnd()
+                - date_range()
+                    periods
+                    freq
+                diff()
+                resample()
+                    'ME'
