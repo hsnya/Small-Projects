@@ -1,0 +1,30 @@
+{
+    "default": 
+        {"board_char": "~~",
+        "miss_char": "><",
+        "board_size": [
+            10,
+            10
+        ],
+        "bg_color": [
+            255,
+            255,
+            255
+        ],
+        "char_color": [
+            0,
+            105,
+            148
+        ],
+        "miss_color": [
+            50,
+            105,
+            148
+        ],
+        "hit_color": [
+            100,
+            55,
+            98
+        ]
+    }
+}

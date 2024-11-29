@@ -24,6 +24,7 @@ import functools
 import select
 import sys
 import time
+from collections.abc import Iterable
 
 flow_mode: int = 0
 """How the functions values should be treated,
@@ -115,19 +116,14 @@ def move_cursor(direction: str, n: int = 1) -> str:
         n (int, optional): How many times to move the cursor. Defaults to 1.
 
     Raises:
-        ValueError: If passed a non-str type to the parameter `direction`.
-        ValueError: If passed a non-int type to the parameter `n`.
         ValueError: If the `direction`'s first letter is not valid.
     
     Returns:
         str: Command to print, or combine with other commands.
     """
     
-    if type(direction) != str:
-        raise ValueError('`direction` is not a string')
-    
-    if type(n) != int:
-        raise ValueError('`n` is not an integer')
+    direction = str(direction)
+    n = int(n)
     
     l: str = direction[0].lower()
     match l:
@@ -158,30 +154,22 @@ def set_cursor(n: int = 1, m: int = 1) -> str:
     Args:
         n (int, optional): Row. Defaults to 1.
         m (int, optional): Column. Defaults to 1.
-
-    Raises:
-        ValueError: If passed a non-int type to the parameter `n`.
-        ValueError: If passed a non-int type to the parameter `m`.
     
     Returns:
         str: Command to print, or combine with other commands.
     """
     
-    if type(n) != int:
-        raise ValueError('n is not an integer')
-    
-    if type(m) != int:
-        raise ValueError('m is not an integer')
-    
+    n = int(n)
+    m = int(m)
     
     return f'\033[{n};{m}H'
 
 
-def get_cursor() -> tuple[int]:
+def get_cursor() -> Iterable[int]:
     """Get the cursor's position in the terminal.
 
     Returns:
-        tuple[int]: x, y. the cursor's position.
+        Iterable[int]: x, y. the cursor's position.
     """
     sys.stdout.write("\033[6n")
     sys.stdout.flush()
@@ -241,19 +229,15 @@ def erase(space: str = 'Screen', n: int = 2) -> str:
         n (int, optional): Erasion mode (from 0 to 2). Defaults to 2.
 
     Raises:
-        ValueError: If passed a non-str type to the parameter `space`.
-        ValueError: If passed a non-int type to the parameter `n`.
         ValueError: If passed an integer not in the specified range to the parameter `n`.
+        ValueError: If passed an invalid space to the parameter `space`.
     
     Returns:
         str: Command to print, or combine with other commands.
     """
     
-    if type(space) != str:
-        raise ValueError('`space` is not a string')
-    
-    if type(n) != int:
-        raise ValueError('`n` is not an integer')
+    space = str(space)
+    n = int(n)
  
     if not 0 <= n <= 2:
         raise ValueError('n is not in the specified range (0-2)')
@@ -283,19 +267,14 @@ def scroll(direction: str, n: int = 1) -> str:
         n (int, optional): The amount of times to scroll. Defaults to 1.
 
     Raises:
-        ValueError: If passed a non-str type to the parameter `direction`.
-        ValueError: If passed a non-int type to the parameter `n`.
         ValueError: If the `direction`'s first letter is not valid.
     
     Returns:
         str: Command to print, or combine with other commands.
     """
     
-    if type(direction) != str:
-        raise ValueError('`direction` is not a string')
-    
-    if type(n) != int:
-        raise ValueError('`n` is not an integer')
+    direction = str(direction)
+    n = int(n)
     
     l: str = direction[0].lower()
     match l:
@@ -313,7 +292,7 @@ def scroll(direction: str, n: int = 1) -> str:
 @flow
 def sgr(reset: bool = False, **kwargs) -> str:
     """Changes how the text looks. Enter a key-value of each format for the name as key and the value for how do want it to look.
-    The_name_of_formation = False *to disable* / True *to enable* / int *for predefined colors from 0-255* / tuple[int] *for rbg colors*
+    The_name_of_formation = False *to disable* / True *to enable* / int *for predefined colors from 0-255* / Iterable[int] *for rbg colors*
     - bold: bool
     - faint: bool
     - italic: bool
@@ -323,31 +302,28 @@ def sgr(reset: bool = False, **kwargs) -> str:
     - overline: bool
     - blink: bool
     - invert: bool
-    - foreground: bool | int | tuple[int]
-    - background: bool | int | tuple[int]
+    - foreground: bool | int | Iterable[int]
+    - background: bool | int | Iterable[int]
 
     Args:
         reset (bool, optional): If true, it will reset the formation before formatting. Defaults to False.
         **kwargs (dict, optional): Formats.
 
     Raises:
-        ValueError: If passed a non-boolean type to the parameter `reset`.
         ValueError: If passed an invalid format key to the parameter `**kwargs`.
-        ValueError: If passed a non-boolean format value to the parameter `**kwargs`.
         ValueError: If passed an invalid color format.
 
     Returns:
         str: Command to print, or combine with other commands.
     """
     
-    if type(reset) != bool:
-        raise ValueError('`reset` is not a boolean')
+    reset = bool(reset)
     
     f = '\033[{}m'
     formats = {'bold': {True: 1, False: 22}, 'faint': {True: 2, False: 22}, 'italic': {True: 3, False: 23},
                'underline': {True: 4, False: 24}, 'double_underline': {True: 21, False: 24}, 'overline': {True: 53, False: 55},
                'blink': {True: '5', False: '25'}, 'invert': {True: '7', False: '27'}, 'strike': {True: '9', False: '29'},
-               'foreground': {int: '38;5;{}', tuple: '38;2;{};{};{}', False: 39}, 'background': {int: '48;5;{}', tuple: '48;2;{};{};{}', False: 49}}
+               'foreground': {int: '38;5;{}', Iterable: '38;2;{};{};{}', False: 39}, 'background': {int: '48;5;{}', Iterable: '48;2;{};{};{}', False: 49}}
     
     foreground = 'foreground',kwargs.pop('foreground', None)
     background = 'background',kwargs.pop('background', None)
@@ -359,10 +335,7 @@ def sgr(reset: bool = False, **kwargs) -> str:
         if key not in formats:
             raise ValueError(f'{key} is an invalid format')
         
-        value = kwargs[key]
-        
-        if type(value) != bool:
-            raise ValueError(f'{key}\'s value is not boolean')
+        value = bool(kwargs[key])
         
         formation += f.format(formats[key][value])
 
@@ -373,10 +346,10 @@ def sgr(reset: bool = False, **kwargs) -> str:
         if value != None:
             if value == False:
                 formation += f.format(formats[name][False])
-            elif type(value) == int:
+            elif isinstance(value, int):
                 formation += f.format(formats[name][int].format(value))
-            elif type(value) == tuple and all(type(x) == int and 0 <= x <= 255 for x in value) and len(value) == 3:
-                formation += f.format(formats[name][tuple].format(*value))
+            elif isinstance(value, Iterable) and all(type(x) == int and 0 <= x <= 255 for x in value) and len(value) == 3:
+                formation += f.format(formats[name][Iterable].format(*value))
             else:
                 raise ValueError(f'{value} for {name} is not valid.')
     
