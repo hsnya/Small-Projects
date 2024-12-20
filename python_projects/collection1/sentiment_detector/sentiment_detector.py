@@ -13,9 +13,6 @@ Section.
 Attributes:
     positive_words (list[str]): Positive words extracted from assets.
     negative_words (list[str]): Negative words extracted from assets.
-
-Todo:
-    * Lookup for improvements and apply them.
 """
 import csv
 import os.path
@@ -65,8 +62,6 @@ def get_positives(s: str) -> int:
     
     positive_score = 0
     for word in positive_words:
-        if word in s:
-            pass
         positive_score += s.count(word)
     return positive_score
         
@@ -196,7 +191,6 @@ def tweets_detector_dicts(file_data: tuple[str] = None):
         with open(output_path, 'w') as outputs_file:
             reader = csv.DictReader(inputs_file)
             writer = csv.DictWriter(outputs_file, ('Number of Retweets', 'Number of Replies', 'Positive Score', 'Negative Score', 'Net Score'))
-            writer.writeheader()
             
             for line in reader:
                 positive_score = get_positives(line['tweet_text'])

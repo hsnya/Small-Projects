@@ -1,6 +1,6 @@
 """Draw a tree by recursive functions.
 
-Use recursion to draw a tree, with specified settings.
+Use recursion to draw a tree with specified settings.
 
 Examples:
     $ draw_tree(start_length = 120, start_width = 30, start_arc = 50, start_splits = 2,
@@ -11,11 +11,8 @@ Examples:
     $ draw_tree(*pack_inputs())
 
 Attributes:
-    canvas (_Screen): The window used to draw trees on, can be used to clear the broad for example.
+    canvas (_Screen): The window used to draw trees on. Can be used to clear the broad for example.
     tor (Turtle): The turtle that draws the trees.
-
-Todo:
-    * Lookup for improvements and apply them.
 """
 import turtle
 
@@ -77,8 +74,8 @@ def draw_fast_leaf(size: int | float = 10, color: str = 'green', prev_color: str
 
 
 def draw_branch(current_depth: int = 3, current_length: int | float = 60, current_width: int | float = 5, current_arc: int | float = 50, current_splits: int | float = 2,
-            length_change: int | float = 0, width_change: int | float = 0, arc_change: int | float = 0, splits_change: int | float = 0,
-            do_draw_leaf: bool = True, do_fast_leaf: bool = False, leaf_size: int | float = 10, leaf_color: str = 'green', wood_color: str = 'brown'):
+                length_change: int | float = 0, width_change: int | float = 0, arc_change: int | float = 0, splits_change: int | float = 0,do_draw_leaf: bool = True,
+                do_fast_leaf: bool = False, leaf_size: int | float = 10, leaf_color: str = 'green', wood_color: str = 'brown'):
     """Draw the tree log and keep call itself with different parameters to draw branches.
 
     Args:
@@ -97,7 +94,7 @@ def draw_branch(current_depth: int = 3, current_length: int | float = 60, curren
         leaf_color (str, optional): The color of the leaf. Defaults to 'green'.
         wood_color (str, optional): The color of the wood, branches and log. Defaults to 'brown'.
     """
-    # Draw a leaf at depth = 0 if do_draw_leaf is true and make it fast if do_fast_leaf is true.
+    # Draw a leaf at depth = 0 if do_draw_leaf is true, and make it fast if do_fast_leaf is true.
     if current_depth == 0:
         if do_draw_leaf == True:
             if do_fast_leaf == True:
@@ -116,14 +113,16 @@ def draw_branch(current_depth: int = 3, current_length: int | float = 60, curren
         tor.width(current_width)
         tor.color(wood_color)
         
+        tor.pendown()
         tor.right(current_arc)
         tor.forward(current_length)
         
         # Going deeper while applying some changes.
         draw_branch(current_depth - 1, current_length + length_change, current_width + width_change, current_arc + arc_change,
-                 current_splits + splits_change, length_change, width_change, arc_change, splits_change,
-                 do_draw_leaf, do_fast_leaf, leaf_size, leaf_color, wood_color)
+                    current_splits + splits_change, length_change, width_change, arc_change, splits_change,
+                    do_draw_leaf, do_fast_leaf, leaf_size, leaf_color, wood_color)
         
+        tor.penup()
         tor.width(current_width)
         tor.color(wood_color)
         tor.backward(current_length)
@@ -133,9 +132,9 @@ def draw_branch(current_depth: int = 3, current_length: int | float = 60, curren
 
 
 def draw_tree(start_length: int | float = 60, start_width: int | float = 5, start_arc: int | float = 50, start_splits: int | float = 2,
-            end_length: int | float = 60, end_width: int | float = 5, end_arc: int | float = 50, end_splits: int | float = 2,
-            tree_depth: int | float = 3, leaf_size: int | float = 10, speed: int | float = 0, do_draw_leaf: bool = True, do_fast_leaf: bool = False,
-            wood_color: str = 'brown', leaf_color: str = 'green', start_x: int | float = 0, start_y: int | float = -canvas.screensize()[1], angle: int | float = 90):
+              end_length: int | float = 60, end_width: int | float = 5, end_arc: int | float = 50, end_splits: int | float = 2,
+              tree_depth: int | float = 3, leaf_size: int | float = 10, speed: int | float = 0, do_draw_leaf: bool = True, do_fast_leaf: bool = False,
+              wood_color: str = 'brown', leaf_color: str = 'green', start_x: int | float = 0, start_y: int | float = -canvas.screensize()[1], angle: int | float = 90):
     """Draw a full tree at specified coordinates.
  
     Args:
@@ -178,19 +177,19 @@ def draw_tree(start_length: int | float = 60, start_width: int | float = 5, star
         tree_depth += 1 # Increasing by 1 for the leafs.
     
     draw_branch(current_depth = tree_depth, current_length = start_length, current_width = start_width, current_arc = start_arc, current_splits = start_splits,
-        length_change = length_change, width_change = width_change, arc_change = arc_change, splits_change = splits_change,
-        do_draw_leaf = do_draw_leaf, do_fast_leaf = do_fast_leaf, leaf_size = leaf_size, leaf_color = leaf_color, wood_color = wood_color)
+                length_change = length_change, width_change = width_change, arc_change = arc_change, splits_change = splits_change,
+                do_draw_leaf = do_draw_leaf, do_fast_leaf = do_fast_leaf, leaf_size = leaf_size, leaf_color = leaf_color, wood_color = wood_color)
 
 
-def pack_inputs() -> tuple:
+def pack_inputs() -> tuple[float, str, None]:
     """A function that asks for user's input for the tree settings.Then, pack the inputs into a tuple.
     Just unpack the tuple before passing it into the draw_tree() function.
 
     Returns:
-        tuple: Packed inputs.
+        tuple[float, str, None]: Packed inputs.
     """
     
-    print('-- Type two numbers separated with space for the next prompts: --')
+    print('-- Type two numbers separated with space for the next prompts --')
 
     start_length, end_length = input_float('Enter the starting and ending sticks length: ', 2)
     start_width, end_width = input_float('Enter the starting and ending sticks width: ', 2)
@@ -200,7 +199,7 @@ def pack_inputs() -> tuple:
     print('-- Type a single number for the next prompts --')
     
     tree_depth = input_float('Enter the depth of the tree (how many times the stick will split): ')
-    speed = input_float('Enter how fast do you want the turtle (I recommended 0): ')
+    speed = input_float('Enter how fast do you want the turtle (0 Recommended): ')
     wood_color = input_tor_color('Enter the color of the wood: ')
     
     do_draw_leaf = input('Enter Y for if you want to draw leafs, or anything else if not: ') == 'Y'
@@ -208,11 +207,47 @@ def pack_inputs() -> tuple:
         do_fast_leaf = input('Enter Y if you want the leaf to be fast, or anything else if not: ') == 'Y'
         leaf_size = input_float('Enter the leaf size: ')
         leaf_color = input_tor_color('Enter the color of the leafs: ')
+    else:
+        do_fast_leaf = None
+        leaf_size = None
+        leaf_color = None
 
     start_x, start_y, angle = input_float('Enter x, y and the angle of the tree separated by spaces: ', 3)
 
     return (start_length, start_width, start_arc, start_splits,
             end_length, end_width, end_arc, end_splits,
+            tree_depth, leaf_size, speed, do_draw_leaf, do_fast_leaf,
+            wood_color, leaf_color, start_x, start_y, angle)
+
+
+def fast_pack_inputs() -> tuple[float, str, None]:
+    """A function that asks for user's input for the basic tree settings, not all the settings like pack_inputs(). Then, pack the inputs into a tuple.
+    Just unpack the tuple before passing it into the draw_tree() function.
+
+    Returns:
+        tuple[float, str, None]: Packed inputs.
+    """
+    
+    print('-- Type a single number for the next prompts --')
+
+    length = input_float('Enter sticks length: ')
+    width = input_float('Enter the starting and ending sticks width: ')
+    arc = input_float('Enter the angle between sticks: ')
+    splits = input_float('Enter sticks splits: ')
+
+    tree_depth = input_float('Enter the depth of the tree (how many times the stick will split): ')
+    speed = 0
+    wood_color = input_tor_color('Enter the color of the wood: ')
+    
+    do_draw_leaf = True
+    do_fast_leaf = False
+    leaf_size = input_float('Enter the leaf size: ')
+    leaf_color = input_tor_color('Enter the color of the leafs: ')
+
+    start_x, start_y, angle = 0, -320, 90 
+
+    return (length, width, arc, splits,
+            length, width, arc, splits,
             tree_depth, leaf_size, speed, do_draw_leaf, do_fast_leaf,
             wood_color, leaf_color, start_x, start_y, angle)
 
@@ -263,25 +298,26 @@ def input_tor_color(input_prompt: str = '') -> str | tuple[float]:
         prompt = prompt.split()
         if len(prompt) == 3:
             try:
-                color_tup = (float(x)/100 for x in prompt)
+                color_tup = tuple(float(x)/100 for x in prompt)
                 tor.color(*color_tup)
                 return color_tup
-            except Exception as x:
+            except Exception:
                 pass
         
         try:
             tor.color(prompt[0])
             return prompt[0]
-        except:
+        except Exception:
             pass
         print('*Invalid input, please enter a name of an color or numbers in rgb format in range 0-100 separated by spaces.')
         print(prompt)
                 
 
 if __name__ == '__main__':
-    draw_tree(*pack_inputs())
-    draw_tree(start_length = 120, start_width = 30, start_arc = 50, start_splits = 2,
-                end_length = 10, end_width = 3, end_arc = 360/7, end_splits = 3,
-                tree_depth = 5, leaf_size = 25, speed = 0, do_draw_leaf = True, do_fast_leaf = False,
-                wood_color = 'brown', leaf_color = 'pink', start_x = 0, start_y = -320, angle = 90)
+    # draw_tree(*pack_inputs())
+    draw_tree(*fast_pack_inputs())
+    # draw_tree(start_length = 120, start_width = 30, start_arc = 50, start_splits = 2,
+    #             end_length = 10, end_width = 3, end_arc = 360/7, end_splits = 3,
+    #             tree_depth = 5, leaf_size = 25, speed = 0, do_draw_leaf = True, do_fast_leaf = False,
+    #             wood_color = 'brown', leaf_color = 'pink', start_x = 0, start_y = -320, angle = 90)
     canvas.exitonclick()

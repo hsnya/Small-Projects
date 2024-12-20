@@ -8,8 +8,6 @@ Example:
 Todo:
     * Lookup for improvements and apply them.
 """
-import json
-
 import requests
 
 

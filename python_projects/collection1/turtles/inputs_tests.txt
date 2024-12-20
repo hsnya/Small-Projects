@@ -1,0 +1,85 @@
+# prompts
+-- Type two numbers separated with space for the next prompts --
+Enter the starting and ending sticks length: 
+Enter the starting and ending sticks width: 
+Enter the starting and ending angles between sticks: 
+Enter the starting and ending sticks splits: 
+-- Type a single number for the next prompts --
+Enter the depth of the tree (how many times the stick will split):
+Enter how fast do you want the turtle (0 Recommended):
+Enter the color of the wood:
+Enter Y for if you want to draw leafs, or anything else if not:
+Enter Y if you want the leaf to be fast, or anything else if not:
+Enter the leaf size:
+Enter the color of the leafs:
+Enter x, y and the angle of the tree separated by spaces:
+
+# tests 1
+120 10
+30 3
+50 51.428571428571428571428571428571
+2 3
+5
+0
+brown
+Y
+Anything, as if it matters.
+25
+pink
+0 -320 90
+
+# tests 2
+10 120
+3 30
+51.428571428571428571428571428571 50
+3 2
+5
+0
+100 0 0
+Y
+Y
+100
+0 100 0
+0 320 -90
+
+# tests 3
+120 10
+30 3
+50 51.428571428571428571428571428571
+2 3
+5
+0
+brown
+ 
+-320 0 0
+
+# quick prompts
+-- Type a single number for the next prompts --
+Enter sticks length:
+Enter the starting and ending sticks width:
+Enter the angle between sticks:
+Enter sticks splits:
+Enter the depth of the tree (how many times the stick will split):
+Enter the color of the wood:
+Enter the color of the leafs:
+
+
+# tests 4
+80
+10
+50
+2
+3
+brown
+100
+pink
+
+# tests 5
+80
+10
+50
+2
+3
+100 0 0
+100
+0 100 0

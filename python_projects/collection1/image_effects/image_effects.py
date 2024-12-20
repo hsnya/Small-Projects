@@ -230,11 +230,11 @@ def input_effect(img_data: tuple[str] = None):
         img_data = input_image('Enter image name including the extension (from the inputs folder): ')
         
     img = image.Image(img_data[0])
-    win = win = image.ImageWin(img.getWidth(), img.getHeight())
+    win = image.ImageWin(img.getWidth(), img.getHeight())
     img.draw(win)
 
-    animate = input('Do you want animate effects? Yes to enable, anything to disable: ') == 'Yes'
-    print('''Here are the functions names:
+    animate = input('Do you want to animate effects? Yes to enable, anything to disable: ') == 'Yes'
+    print('''Here are the functions' names:
     - red_wash
     - green_wash
     - blue_wash
