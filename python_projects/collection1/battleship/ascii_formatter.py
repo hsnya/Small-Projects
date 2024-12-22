@@ -15,9 +15,6 @@ Attributes:
 - 1: Print their value.
 - 2: Accumulate, then leash.
     accum (str): Where the commands accumulated. Decode before printing to see how it looks.
-
-Todo:
-    * Lookup for improvements and apply them.
 """
 
 import functools
